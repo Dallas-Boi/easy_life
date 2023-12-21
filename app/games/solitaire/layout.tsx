@@ -1,16 +1,17 @@
+// Made Wednesday, December 20th, 2023
+
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-
-// CSS
-import '@/public/css/main.css'
+import '@/public/scripts/main.js'
+// Css
 
 const inter = Inter({ subsets: ['latin'] })
-
+// site Head
 export const metadata: Metadata = {
-  title: '- Dashboard -',
-  description: 'EasyLife Dashboard',
+  title: '- Solitaire -',
+  description: 'EasyLife Solitaire',
 }
-// Root / Main Page
+// Solitaire Page
 export default function RootLayout({
   children,
 }: {
