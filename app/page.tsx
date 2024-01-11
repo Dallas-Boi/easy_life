@@ -1,12 +1,28 @@
-import Image from 'next/image'
-import GetHeader from './components/global_elm';
+
+import {GetHeader} from '@/components/server';
 import Script from 'next/script'
-export default function Dashboard() {
+import {Counter} from '@/components/client'
+import {getData} from './components/server'
+import { cookies } from 'next/headers'
+
+export default async function Dashboard() {
+  // Gets the Cookie from the client
+  const cookieStore = cookies()
+  const uid = cookieStore.get('id')
+  console.log(uid)
+  // Gets the data from db
+  const data = await getData("12")
+  var name = "Sign In"
+  // Checks if the account doesn't exist
+  if (data !== undefined) {
+    name = data["username"]
+  }
+ 
   return (
    <>
+        <h1>{name}</h1>
         <GetHeader />
-        <Script src="scripts/main.js" strategy="lazyOnload"/>
+        <Counter />
     </>
   )
 }
-

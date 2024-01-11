@@ -23,8 +23,11 @@
       }
     ],
     "paths": {
-      "@/components/*": ["app/components/*"],
-      "@/public/*": ["./public/*"]
+      "@/components/*": ["./app/components/*"],
+      "@/public/*": ["./public/*"],
+      "@/scripts/*": ["./public/scripts/*"],
+      "@/styles/*": ["./public/css/*"],
+      "@/api/*": ["./app/api/*"]
     }
   },
   "include": [
@@ -32,8 +35,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/components/global_elm.tsx"
-  ],
+    "app/components/server.tsx"
+, "app/api/database/dbHandler.tsx" ],
   "exclude": [
     "node_modules"
   ]

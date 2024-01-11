@@ -86,7 +86,7 @@ a:hover {color:white}
 .color_black {color: black;}
 
 /* Hidden Cards */
-.card_hidden { content: url("/cards/purple_back.jpg"); }
+.card_hidden { content: url("../public/cards/purple_back.jpg"); }
 
 /*
 .test {

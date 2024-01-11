@@ -1,14 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Link from 'next/link';
-
 // CSS
-//import './global.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: '- Dashboard -',
+  title: '- Login -',
   description: 'EasyLife Dashboard',
 }
 
@@ -29,4 +26,8 @@ export default function RootLayout({
         </body>
     </html>
   )
+}
+
+function Hello() {
+  console.log("Hello")
 }
