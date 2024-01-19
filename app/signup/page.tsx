@@ -10,7 +10,9 @@ export default function Dashboard() {
     // Returns the HTML
     return (
         <>
-            <SignUpBox />
+            <div id="main">
+                <SignUpBox />
+            </div>
         </>
     )
 }

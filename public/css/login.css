@@ -1,0 +1,25 @@
+/* Made  Wednesday, January 17th, 2024 */
+
+#inpts {
+    position: relative;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5em;
+}
+
+/* inpts Children */
+#inpts > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top:10px;
+}
+
+/* Submite Button */
+#sub-btn {
+    position: relative;
+    width:300px;
+    left:2.5px;
+}

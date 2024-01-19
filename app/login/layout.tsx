@@ -27,7 +27,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-function Hello() {
-  console.log("Hello")
-}
