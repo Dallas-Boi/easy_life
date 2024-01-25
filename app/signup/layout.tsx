@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 // CSS
 import '@/styles/login.css'
-import '../global.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,8 +21,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script src="https://code.jquery.com/jquery-3.7.0.js" />
-        <script src="https://cdn.jsdelivr.net/npm/animejs@3.0.1/lib/anime.min.js" />
       </head>
       <body className={inter.className}>
         {children}

@@ -2,10 +2,11 @@
 
 'use client' // Client Script
 // Imports
-import React, { useState, FormEvent } from 'react'
+import React, { useState, useEffect, MouseEvent, FormEvent } from 'react'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { encryptMsg } from '@/components/crypt'
 import { useCookies } from 'react-cookie';
+import { NavApps } from './navMenu'
 
 // Returns a Card with the given ID
 function MCard (cid:string, csuit:string, cnum:string, color:string, cls:string) {
@@ -19,11 +20,77 @@ function MCard (cid:string, csuit:string, cnum:string, color:string, cls:string)
 }
 
 // Returns the Login Box
+export function LoginBox() {
+    const [error, setErrors] = useState("");
+    async function onLog(formData: FormData) {
+
+        // Data to encrypt
+        var ddata = {
+            type: "e",
+            txt: formData.get('pword')
+        }
+        // Fetch en
+        const de = await fetch(`../api/cryption`, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json; charset=utf8'
+            },
+            body: JSON.stringify(ddata),
+        }).then((response) => response.json())
+
+        // All the form data in an dictionary
+        var accData = {
+            type: "login",
+            username: formData.get('name'),
+            pword: de.data
+        }
+        
+        // Sends Data to the API 
+        const logAcc = await fetch('../api/database', {
+            method: 'POST',
+            headers: {
+            'Content-Type' : 'application/json; charset=utf8'
+            },
+            body: JSON.stringify(accData),
+        })
+
+		// Checks the status if the user exist
+		if (logAcc.status == 302) {
+            setErrors("Username or Password is Incorrect.")
+            // Sets a timeout to change the error code 
+            setTimeout(() => {
+                setErrors("")
+            }, 2000);
+            return
+		}
+
+        // Checks the status
+		if (logAcc.status == 303) {
+            setErrors("Password is Incorrect.")
+            // Sets a timeout to change the error code 
+            setTimeout(() => {
+                setErrors("")
+            }, 2000);
+            return
+		}
+
+        // If no errors occur then it will redirect the user back home
+        redirect("/")
+    }
+    // Returns the HTML
+    return (
+		<form id="inpts" action={onLog} method="POST">
+			<input name="name" placeholder='username' minLength={5} required/>
+			<input type="password" name="pword" placeholder='password' minLength={8} required/>
+			<button id="sub-btn" type="submit">Login</button>
+			<p>{error}</p>
+		</form>
+    )
+}
 
 // Returns the SignUp box
 function SignUpBox() {
-    const [error, setErrors] = useState(""); 
-	const [cookies, setCookie, removeCookie] = useCookies(['u_n']);
+    const [error, setErrors] = useState("");
     // When the User submits
     async function onSub(formData: FormData) {
         // Checks if the password and confirm password is the same
@@ -31,14 +98,27 @@ function SignUpBox() {
             setErrors("Passwords Do Not Match")
             return
         }
-        var pwor = encryptMsg(formData.get('pword'))
+        // Data to encrypt
+        var ddata = {
+            type: "e",
+            txt: formData.get('pword')
+        }
+        // Fetch en
+        const de = await fetch(`../api/cryption`, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json; charset=utf8'
+            },
+            body: JSON.stringify(ddata),
+        }).then((response) => response.json())
+
         // All the form data in an dictionary
         var accData = {
             type: "signup",
             username: formData.get('name'),
-            pword: (await pwor).toString(),
+            pword: de.data
         }
-
+        
         // Sends Data to the API 
         const makeAcc = await fetch('../api/database', {
             method: 'POST',
@@ -47,8 +127,7 @@ function SignUpBox() {
             },
             body: JSON.stringify(accData),
         })
-        console.log(makeAcc.status)
-        console.log(makeAcc.statusText)
+
 		// Checks the status
 		if (makeAcc.status == 302) {
             setErrors("Username Taken")
@@ -59,7 +138,6 @@ function SignUpBox() {
             return
 		}
         // If no errors occur then it will redirect the user back home
-        setCookie("u_n", )
         redirect("/")
     }
 
@@ -77,47 +155,70 @@ function SignUpBox() {
 
 // Returns the Header
 const GetHeader = () => {
-    // Variables
-    const [sub, setSub] = useState("") // href link
-    const [txt, setTxt] = useState("") // link text
-    const [dis, setDis] = useState("") // display name text
+	// Allows the cookie to be accessed
+	const [cookies, setCookie, removeCookie] = useCookies(['_k']);
+    const [disName, setName] = useState("Sign In")
+    // if the user does not have an account cookie
+    async function onload() {
+        // The info needed to identify the account
+        const accInfo = {type: "userData"}
 
-	// gets the cookie data for this users account
-	const [cookies, setCookie, removeCookie] = useCookies(['user']);
-
-	// if the user does not have an account cookie
-	const AccCheck = () => {
-		if (cookies["user"] == undefined) {
-			return [
-				<a href="/signup">Sign Up</a>,
-				<a href="/login">Login</a>
-			]
-		} else {
-			return <a href="/profile">Profile</a>
-		}
-	}
-	console.log('Cookies: ', cookies["user"]);
-    // Sends Data to the API 
-	/* const getAcc = await fetch('../api/database', {
-		method: 'GET',
-		headers: {
-		'Content-Type' : 'application/json; charset=utf8'
-		},
-		body: JSON.stringify({"a":""}),
-	})
-	console.log(getAcc.body) */
+        // Sends Data to the API 
+        const getAcc = await fetch(`../api/database`, {
+            method: 'POST',
+            headers: {
+            'Content-Type' : 'application/json; charset=utf8'
+            },
+            body: JSON.stringify(accInfo)
+        }).then((response) => response.json())
+      
+        // All the data that was return with the ID
+        const dat = await getAcc.username
+        return dat
+    }
+    // 
+    useEffect(() => {
+        if (cookies["_k"] !== undefined) { // If no cookie
+            onload().then((n) => setName(n)) // Sets the clients name
+        }
+    })
+    
+    // Get Account Actions like Signin/signup
+    function GetAccAct() {
+        if (cookies["_k"] !== undefined) { // If no cookie
+            return (
+                <>
+                    <a href="/profile" suppressHydrationWarning>Profile</a>
+                    <a href="/logout" suppressHydrationWarning>Log Out</a>
+                </>
+            )
+        }
+        return (
+            <>
+                <a href="/signup" suppressHydrationWarning>Sign Up</a>
+                <a href="/login" suppressHydrationWarning>Login</a>
+            </>
+        )
+    }
+    // Returns the Users name
+    function GetAccName() {
+        
+        if (cookies["_k"] !== undefined) { // If no cookie
+            return <nav id="clientName">{disName}</nav>
+        }
+        return <nav id="clientName">Sign In</nav>
+    }
 
     // Returns the header
     return (
-        <div id="header">
-            <div id="links">
+        <header id="header">
+            <nav id="links">
                 <a href="/">Home</a>
-                <AccCheck />
-            </div>
-            <div id="disName">
-				{dis}
-            </div>
-        </div>
+                <NavApps />
+                <GetAccAct />
+                <GetAccName/>
+            </nav>
+        </header>
     )
 }
 
