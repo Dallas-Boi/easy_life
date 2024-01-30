@@ -64,7 +64,7 @@ button {
 #clientName {
     position: relative;
     float: right;
-    margin-right:5em;
+    margin-right:8em;
     font-size: 20px;
     color:white;
 }
@@ -100,3 +100,11 @@ nav:hover > * {display:block}
     margin-left:-2em;
 }
 .nav-item-link:hover { color:white; }
+
+#main {
+    margin-top:5em;
+}
+
+#main > * {
+    justify-content: center;
+}

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 // CSS
+import '@/styles/login.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: '- Login -',
-  description: 'EasyLife Dashboard',
+  description: 'EasyLife Login',
 }
 
 // Root / Main Page

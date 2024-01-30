@@ -88,8 +88,8 @@ export async function POST(req: Request, res: Response) {
         // Account Key
         var userKey = `${en.data}|${newUser.id}`
         // Sets the account Key
-        
-        cooke.set('_k', userKey)
+        var oneYear = 60*60*24*365
+        cooke.set('_k', userKey, { maxAge: oneYear })
     } else if (data.type == "login") { // When login is called
 
         var ddata_s = {type: "d",txt: data.pword}
@@ -118,8 +118,8 @@ export async function POST(req: Request, res: Response) {
         // Sets the cookie Key
         var userKey = `${users[0].password}|${users[0].id}`
         // Sets the account Key
-        
-        cooke.set('_k', userKey)
+        var oneYear = 60*60*24*365
+        cooke.set('_k', userKey, { maxAge: oneYear})
 
     } else if (data.type == "userData") { // If the server needs the client data
         const uid = (cooke.get("_k").value).split("|")

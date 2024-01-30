@@ -28,7 +28,7 @@
       "@/scripts/*": ["./public/scripts/*"],
       "@/styles/*": ["./public/css/*"],
       "@/api/*": ["./app/api/*"],
-      "@/global": ["./app/global.css"]
+      "@/elm/*": ["./app/components/elements/*"]
     }
   },
   "include": [
